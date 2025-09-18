@@ -44,18 +44,40 @@ clean_files() {
 
 compile_and_run() {
     local program="$1"
-    if [[ -f "${program}.exe" ]]; then
-        echo "运行 ${program}.exe..."
-        ./"${program}.exe"
+    local source="${program}.c"
+    local executable="${program}.exe"
+    
+    # 检查源文件是否存在
+    if [[ ! -f "$source" ]]; then
+        echo "错误: $source 文件不存在"
+        return 1
+    fi
+    
+    # 检查是否需要重新编译
+    local need_compile=false
+    
+    if [[ ! -f "$executable" ]]; then
+        echo "$executable 不存在，正在编译..."
+        need_compile=true
+    elif [[ "$source" -nt "$executable" ]]; then
+        echo "$source 已修改，重新编译..."
+        need_compile=true
     else
-        echo "${program}.exe 不存在，正在编译..."
-        if gcc -Wall -Wextra -std=c99 -g "${program}.c" -o "${program}.exe"; then
+        echo "$executable 是最新的，直接运行..."
+    fi
+    
+    # 编译（如果需要）
+    if [[ "$need_compile" == true ]]; then
+        if gcc -Wall -Wextra -std=c99 -g "$source" -o "$executable"; then
             echo "编译成功，运行程序..."
-            ./"${program}.exe"
         else
             echo "编译失败！"
+            return 1
         fi
     fi
+    
+    # 运行程序
+    ./"$executable"
 }
 
 # 主逻辑
