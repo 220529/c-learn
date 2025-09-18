@@ -1,55 +1,42 @@
-# Prerequisites
-*.d
+# C语言学习项目 .gitignore
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
-
-# Linker output
-*.ilk
-*.map
-*.exp
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
+# 可执行文件
 *.exe
 *.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+a.out
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
+# 对象文件
+*.o
+*.obj
+
+# 库文件
+*.a
+*.lib
+
+# 临时文件
+*~
+*.tmp
+*.temp
+
+# Visual Studio Code 文件
+.vscode/
+
+# Dev-C++ 文件
+*.dev
+*.layout
+
+# Code::Blocks 文件
+*.cbp
+*.depend
+*.layout
+
+# 调试文件
 *.pdb
+*.ilk
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+# 系统文件
+.DS_Store
+Thumbs.db
 
-# debug information files
-*.dwo
+# 日志文件
+*.log
