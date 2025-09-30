@@ -1,42 +1,24 @@
-# C语言学习项目 .gitignore
+# 编译输出目录
+build/
 
 # 可执行文件
 *.exe
 *.out
-a.out
 
-# 对象文件
+# 编译器生成的文件
 *.o
 *.obj
 
-# 库文件
-*.a
-*.lib
-
 # 临时文件
-*~
 *.tmp
-*.temp
+*~
 
-# Visual Studio Code 文件
+# IDE 文件
 .vscode/
-
-# Dev-C++ 文件
-*.dev
-*.layout
-
-# Code::Blocks 文件
-*.cbp
-*.depend
-*.layout
-
-# 调试文件
-*.pdb
-*.ilk
+.idea/
+*.swp
+*.swo
 
 # 系统文件
 .DS_Store
 Thumbs.db
-
-# 日志文件
-*.log
