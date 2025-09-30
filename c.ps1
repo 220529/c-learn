@@ -75,7 +75,18 @@ function Compile-All {
     Get-ChildItem -Recurse -Filter "*.c" | ForEach-Object {
         Write-Host "编译 $($_.FullName)..."
         $name = $_.BaseName
-        $result = & gcc -Wall -Wextra -std=c99 -g $_.FullName -o "$BuildDir/$name$ext" 2>&1
+        
+        # 检查是否需要特殊的链接库
+        $extraFlags = ""
+        if ($name -eq "sound_app") {
+            $extraFlags = "-mwindows -lole32 -luuid"
+        } elseif ($name -eq "http_server") {
+            $extraFlags = "-lws2_32"
+        } elseif ($name -eq "snake_game") {
+            $extraFlags = "-mwindows -lgdi32"
+        }
+        
+        $result = & gcc -Wall -Wextra -std=c99 -g $_.FullName -o "$BuildDir/$name$ext" $extraFlags.Split() 2>&1
         
         if ($LASTEXITCODE -eq 0) {
             Write-Host "$($_.FullName) 编译成功 -> $BuildDir/$name$ext" -ForegroundColor Green
@@ -159,7 +170,20 @@ function Compile-And-Run {
     
     # 编译（如果需要）
     if ($needCompile) {
-        $result = & gcc -Wall -Wextra -std=c99 -g $sourceFile.FullName -o $executable 2>&1
+        # 检查是否需要特殊的链接库
+        $extraFlags = ""
+        if ($programName -eq "sound_app") {
+            # sound_app 需要 Windows COM 库
+            $extraFlags = "-mwindows -lole32 -luuid"
+        } elseif ($programName -eq "http_server") {
+            # http_server 需要 Winsock 库
+            $extraFlags = "-lws2_32"
+        } elseif ($programName -eq "snake_game") {
+            # snake_game 需要 GDI 库
+            $extraFlags = "-mwindows -lgdi32"
+        }
+        
+        $result = & gcc -Wall -Wextra -std=c99 -g $sourceFile.FullName -o $executable $extraFlags.Split() 2>&1
         
         if ($LASTEXITCODE -eq 0) {
             Write-Host "编译成功: $($sourceFile.FullName) -> $executable" -ForegroundColor Green
