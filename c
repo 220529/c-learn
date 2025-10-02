@@ -143,11 +143,22 @@ compile_and_run() {
     
     # 编译（如果需要）
     if [[ "$need_compile" == true ]]; then
-        if gcc -Wall -Wextra -std=c99 -g "$source" -o "$executable"; then
-            echo "编译成功: $source -> $executable"
+        # 检查是否需要SDL2（通过文件名或内容判断）
+        if grep -q "SDL2/SDL.h" "$source" 2>/dev/null; then
+            echo "检测到SDL2程序，添加SDL2链接..."
+            if gcc -Wall -Wextra -std=c99 -g "$source" -o "$executable" $(sdl2-config --cflags --libs); then
+                echo "编译成功: $source -> $executable"
+            else
+                echo "编译失败！请确保已安装SDL2: brew install sdl2"
+                return 1
+            fi
         else
-            echo "编译失败！"
-            return 1
+            if gcc -Wall -Wextra -std=c99 -g "$source" -o "$executable"; then
+                echo "编译成功: $source -> $executable"
+            else
+                echo "编译失败！"
+                return 1
+            fi
         fi
     fi
     

@@ -17,21 +17,35 @@ all: $(TARGETS)
 # 清理生成的文件
 clean:
 	rm -f *.exe *.o
+	rm -rf build/*
+	rm -rf dist/
 
-# 运行测试程序
-run-test: test.exe
-	./test.exe
+# 贪吃蛇游戏
+snake: exercises/basics/snake.c
+	mkdir -p build
+	$(CC) $(CFLAGS) -o build/snake exercises/basics/snake.c $$(sdl2-config --cflags --libs)
 
-run-test2: test2.exe
-	./test2.exe
+run: snake
+	./build/snake
+.
+# 打包为 Mac App
+dmg:
+	chmod +x scripts/build_app.sh
+	./scripts/build_app.sh
 
 # 显示帮助信息
 help:
-	@echo "可用的命令："
-	@echo "  make          - 编译所有C文件"
-	@echo "  make clean    - 清理可执行文件"
-	@echo "  make run-test - 运行test程序"
-	@echo "  make run-test2 - 运行test2程序"
-	@echo "  make help     - 显示此帮助信息"
+	@echo "🐍 贪吃蛇游戏"
+	@echo ""
+	@echo "运行游戏："
+	@echo "  make run       - 编译并运行"
+	@echo "  ./c snake      - 编译并运行"
+	@echo ""
+	@echo "打包："
+	@echo "  make dmg       - 打包成Mac App"
+	@echo ""
+	@echo "其他："
+	@echo "  make clean     - 清理文件"
+	@echo "  make help      - 显示帮助"
 
-.PHONY: all clean run-test run-test2 help
+.PHONY: all clean snake run dmg help
