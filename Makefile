@@ -27,7 +27,7 @@ snake: exercises/basics/snake.c
 
 run: snake
 	./build/snake
-.
+
 # 打包为 Mac App
 dmg:
 	chmod +x scripts/build_app.sh
