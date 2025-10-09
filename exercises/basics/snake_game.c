@@ -166,12 +166,32 @@ void draw_game(HDC hdc) {
         DeleteObject(snake_brush);
     }
     
-    // 绘制分数和提示信息
+    // 绘制计分板（大字体高亮显示）
     char info[128];
-    sprintf(info, "分数: %d | 长度: %d | [空格]暂停 [R]重新开始", score, snake_length);
     SetBkMode(hdc, TRANSPARENT);
-    SetTextColor(hdc, RGB(50, 50, 50));
-    TextOut(hdc, 10, GRID_HEIGHT * CELL_SIZE + 10, info, strlen(info));
+    
+    // 分数（大号红色）
+    HFONT score_font = CreateFont(24, 0, 0, 0, FW_BOLD, 0, 0, 0, 0, 0, 0, 0, 0, "Arial");
+    HFONT old_font = SelectObject(hdc, score_font);
+    SetTextColor(hdc, RGB(255, 0, 0));
+    sprintf(info, "得分: %d", score);
+    TextOut(hdc, 10, GRID_HEIGHT * CELL_SIZE + 5, info, strlen(info));
+    
+    // 蛇长度（绿色）
+    SetTextColor(hdc, RGB(0, 150, 0));
+    sprintf(info, "长度: %d", snake_length);
+    TextOut(hdc, 150, GRID_HEIGHT * CELL_SIZE + 5, info, strlen(info));
+    SelectObject(hdc, old_font);
+    DeleteObject(score_font);
+    
+    // 操作提示（小字）
+    HFONT tip_font = CreateFont(14, 0, 0, 0, FW_NORMAL, 0, 0, 0, 0, 0, 0, 0, 0, "微软雅黑");
+    SelectObject(hdc, tip_font);
+    SetTextColor(hdc, RGB(100, 100, 100));
+    sprintf(info, "[空格]暂停 [R]重开");
+    TextOut(hdc, 350, GRID_HEIGHT * CELL_SIZE + 10, info, strlen(info));
+    SelectObject(hdc, old_font);
+    DeleteObject(tip_font);
     
     // 游戏结束提示
     if (game_over) {
